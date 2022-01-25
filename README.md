@@ -1,13 +1,15 @@
-# Online payments with Redsys in PHP
+# Online payments with Redsys
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/creagia/redsys-php.svg?style=flat-square)](https://packagist.org/packages/creagia/redsys-php)
 [![Tests](https://github.com/creagia/redsys-php/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/creagia/redsys-php/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/creagia/redsys-php.svg?style=flat-square)](https://packagist.org/packages/creagia/redsys-php)
 
-Integrate your PHP code with Redsys, the lead payment gateway in Spain. This package only works on 8.1 and newer versions. If you
-need compatibility with older versions, check the [Alternatives](#alternatives) section.
+Integrate your PHP code with Redsys, the lead payments gateway in Spain. 
 
-If you are using Laravel, check our other package [creagia/laravel-redsys](https://github.com/creagia/laravel-redsys) for a ready-to-use integration.
+This package uses some PHP 8.1 features, so it only supports `php:^8.1`. If you need compatibility with older versions, 
+check the [alternatives](#alternatives) section.
+
+> If you are using Laravel, check our other package **[creagia/laravel-redsys](https://github.com/creagia/laravel-redsys)** for a ready-to-use integration.
 
 ## Installation
 
