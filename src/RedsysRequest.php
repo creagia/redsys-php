@@ -33,7 +33,7 @@ class RedsysRequest
         ?RequestParameters $requestParameters = null
     ): array {
         $this->parameters = $requestParameters ?? new RequestParameters();
-        $this->parameters->amount = number_format(round($amount, 2) * 100, 0, '', '');
+        $this->parameters->amount = $this->formatAmount($amount);
         $this->parameters->currency = $currency->value;
         $this->parameters->merchantCode = $this->redsysClient->merchantCode;
         $this->parameters->order = $orderNumber;
@@ -47,6 +47,11 @@ class RedsysRequest
         );
 
         return $this->getRequestFieldsArray();
+    }
+
+    private function formatAmount(float $amount): int
+    {
+        return number_format(round($amount, 2) * 100, 0, '', '');
     }
 
     #[ArrayShape(['Ds_SignatureVersion' => "string", 'Ds_MerchantParameters' => "string", 'Ds_Signature' => "string"])]
@@ -67,13 +72,13 @@ class RedsysRequest
 
         $formFields = $this->getRequestFieldsArray();
 
-        return '
-            <form action="' . $this->redsysClient->getBaseUrl() . '/realizarPago" method="post">
-            <input type="hidden" name="Ds_SignatureVersion" value="' . $formFields['Ds_SignatureVersion'] . '"/>
-            <input type="hidden" name="Ds_MerchantParameters" value="' . $formFields['Ds_MerchantParameters'] . '"/>
-            <input type="hidden" name="Ds_Signature" value="' . $formFields['Ds_Signature'] . '"/>
+        return <<<HTML
+            <form action="{$this->redsysClient->getBaseUrl()}/realizarPago" method="post">
+            <input type="hidden" name="Ds_SignatureVersion" value="{$formFields['Ds_SignatureVersion']}"/>
+            <input type="hidden" name="Ds_MerchantParameters" value="{$formFields['Ds_MerchantParameters']}"/>
+            <input type="hidden" name="Ds_Signature" value="{$formFields['Ds_Signature']}"/>
             </form>
             <script>document.forms[0].submit();</script>
-        ';
+        HTML;
     }
 }

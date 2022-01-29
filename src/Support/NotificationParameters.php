@@ -2,6 +2,8 @@
 
 namespace Creagia\Redsys\Support;
 
+use Creagia\Redsys\Casters\NotificationAmountCaster;
+use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class NotificationParameters extends DataTransferObject
@@ -13,7 +15,8 @@ class NotificationParameters extends DataTransferObject
     public string $hour;
 
     #[MapTo('DS_AMOUNT')]
-    public int $amount;
+    #[CastWith(NotificationAmountCaster::class)]
+    public float $amount;
 
     #[MapTo('DS_CURRENCY')]
     public int $currency;
@@ -84,10 +87,5 @@ class NotificationParameters extends DataTransferObject
     public function toArray(): array
     {
         return array_filter(parent::toArray());
-    }
-
-    public function getAmount(): float
-    {
-        return (float) $this->amount / 100;
     }
 }

@@ -26,7 +26,7 @@ it('can validate a valid signature', function () {
     $redsysNotification->setParametersFromResponse($responsePost);
     $result = $redsysNotification->checkResponse();
 
-    expect($result->getAmount())->toBe($this->paymentRequestAmount);
+    expect($result->amount)->toBe($this->paymentRequestAmount);
 });
 
 it('fails if signatures differ', function () {
