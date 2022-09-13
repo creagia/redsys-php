@@ -11,6 +11,9 @@ check the [alternatives](#alternatives) section.
 
 > If you are using Laravel, check our other package **[creagia/laravel-redsys](https://github.com/creagia/laravel-redsys)** for a ready-to-use integration.
 
+## Support us
+[<img width="570" alt="Laradir banner" src="https://user-images.githubusercontent.com/240932/189903723-2c015907-b8c9-4ff7-b6e6-2c8cf10aea16.png">](https://laradir.com/?utm_campaign=github&utm_medium=banner&utm_term=redsys-php)
+
 ## Installation
 
 You can install the package via composer:
