@@ -16,16 +16,16 @@ beforeEach(function () {
 
 it('can create redirect form for credential on file requests', function () {
     $redsysRequest = RedsysRequest::create(
-            $this->redsysClient,
-            new \Creagia\Redsys\Support\RequestParameters(
-                amountInCents: 123_12,
-                order: 9999,
-                currency: Currency::EUR,
-                transactionType: TransactionType::Autorizacion,
-            )
-        )->requestingCardToken(
-            cofType: CofType::Recurring
-        );
+        $this->redsysClient,
+        new \Creagia\Redsys\Support\RequestParameters(
+            amountInCents: 123_12,
+            order: 9999,
+            currency: Currency::EUR,
+            transactionType: TransactionType::Autorizacion,
+        )
+    )->requestingCardToken(
+        cofType: CofType::Recurring
+    );
 
     $redirectForm = $redsysRequest->getRedirectFormHtml();
 
@@ -34,18 +34,18 @@ it('can create redirect form for credential on file requests', function () {
 
 it('can post for successive credential on file requests', function () {
     $redsysRequest = RedsysRequest::create(
-            $this->redsysClient,
-            new \Creagia\Redsys\Support\RequestParameters(
-                amountInCents: 123_12,
-                order: 9999,
-                currency: Currency::EUR,
-                transactionType: TransactionType::Autorizacion
-            ),
-        )->usingCardToken(
-            cofType: CofType::Recurring,
-            cofTransactionId: '123123',
-            merchantIdentifier: 'identifier123',
-        );
+        $this->redsysClient,
+        new \Creagia\Redsys\Support\RequestParameters(
+            amountInCents: 123_12,
+            order: 9999,
+            currency: Currency::EUR,
+            transactionType: TransactionType::Autorizacion
+        ),
+    )->usingCardToken(
+        cofType: CofType::Recurring,
+        cofTransactionId: '123123',
+        merchantIdentifier: 'identifier123',
+    );
 
     $postResponse = $redsysRequest->sendPostRequest();
 

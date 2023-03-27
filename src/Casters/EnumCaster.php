@@ -9,8 +9,7 @@ class EnumCaster implements Caster
     public function __construct(
         private array $types,
         private string $class,
-    )
-    {
+    ) {
     }
 
     public function cast(mixed $value): mixed

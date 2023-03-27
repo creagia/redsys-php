@@ -33,8 +33,7 @@ class RedsysRequest
 
     public function requestingCardToken(
         CofType $cofType,
-    ): static
-    {
+    ): static {
         $this->parameters->cofType = $cofType;
         $this->parameters->cofIni = CofInitial::Yes;
         $this->parameters->merchantIdentifier = MerchantIdentifier::InitialPetition->value;
@@ -46,8 +45,7 @@ class RedsysRequest
         CofType $cofType,
         string $cofTransactionId,
         string $merchantIdentifier,
-    ): static
-    {
+    ): static {
         $this->parameters->cofType = $cofType;
         $this->parameters->cofIni = CofInitial::No;
         $this->parameters->cofTransactionId = $cofTransactionId;
