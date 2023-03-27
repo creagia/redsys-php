@@ -5,10 +5,10 @@ namespace Creagia\Redsys\Support;
 class RequestParametersFields
 {
     public static $relation = [
-        'DS_MERCHANT_AMOUNT' => 'amount',
+        'DS_MERCHANT_AMOUNT' => 'amountInCents',
         'DS_MERCHANT_AUTHORISATIONCODE' => 'authorisationCode',
         'DS_MERCHANT_COF_INI' => 'cofIni',
-        'DS_MERCHANT_COF_TXNID' => 'cofTxnId',
+        'DS_MERCHANT_COF_TXNID' => 'cofTransactionId',
         'DS_MERCHANT_COF_TYPE' => 'cofType',
         'DS_MERCHANT_CONSUMERLANGUAGE' => 'consumerLanguage',
         'DS_MERCHANT_CURRENCY' => 'currency',
@@ -17,7 +17,7 @@ class RequestParametersFields
         'DS_MERCHANT_EMV3DS' => 'emv3ds',
         'DS_MERCHANT_EXPIRYDATE' => 'expiryDate',
         'DS_MERCHANT_GROUP' => 'group',
-        'DS_MERCHANT_IDENTIFIER' => 'identifier',
+        'DS_MERCHANT_IDENTIFIER' => 'merchantIdentifier',
         'DS_MERCHANT_IDOPER' => 'idOper',
         'DS_MERCHANT_MERCHANTCODE' => 'merchantCode',
         'DS_MERCHANT_MERCHANTDATA' => 'merchantData',

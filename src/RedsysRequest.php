@@ -2,21 +2,58 @@
 
 namespace Creagia\Redsys;
 
-use Creagia\Redsys\Enums\Currency;
-use Creagia\Redsys\Enums\TransactionType;
+use Creagia\Redsys\Enums\CofInitial;
+use Creagia\Redsys\Enums\CofType;
+use Creagia\Redsys\Enums\DirectPayment;
+use Creagia\Redsys\Enums\MerchantIdentifier;
 use Creagia\Redsys\Support\RequestParameters;
 use Creagia\Redsys\Support\Signature;
-use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use JetBrains\PhpStorm\ArrayShape;
 
 class RedsysRequest
 {
+    private RedsysClient $redsysClient;
     private RequestParameters $parameters;
     private string $signature;
 
-    public function __construct(
-        private RedsysClient $redsysClient
-    ) {
+    public static function create(
+        RedsysClient $redsysClient,
+        RequestParameters $requestParameters
+    ): static {
+        $request = new RedsysRequest();
+        $request->redsysClient = $redsysClient;
+        $request->parameters = $requestParameters;
+        $request->parameters->merchantCode = $request->redsysClient->merchantCode;
+        $request->parameters->terminal = $request->redsysClient->terminal;
+
+        return $request;
+    }
+
+    public function requestingCardToken(
+        CofType $cofType,
+    ): static
+    {
+        $this->parameters->cofType = $cofType;
+        $this->parameters->cofIni = CofInitial::Yes;
+        $this->parameters->merchantIdentifier = MerchantIdentifier::InitialPetition->value;
+
+        return $this;
+    }
+
+    public function usingCardToken(
+        CofType $cofType,
+        string $cofTransactionId,
+        string $merchantIdentifier,
+    ): static
+    {
+        $this->parameters->cofType = $cofType;
+        $this->parameters->cofIni = CofInitial::No;
+        $this->parameters->cofTransactionId = $cofTransactionId;
+        $this->parameters->merchantIdentifier = $merchantIdentifier;
+
+        return $this;
     }
 
     public function getParameters(): array
@@ -25,38 +62,14 @@ class RedsysRequest
     }
 
     #[ArrayShape(['Ds_SignatureVersion' => "string", 'Ds_MerchantParameters' => "string", 'Ds_Signature' => "string"])]
-    public function createPaymentRequest(
-        float $amount,
-        string $orderNumber,
-        Currency $currency,
-        TransactionType $transactionType,
-        ?RequestParameters $requestParameters = null
-    ): array {
-        $this->parameters = $requestParameters ?? new RequestParameters();
-        $this->parameters->amount = $this->formatAmount($amount);
-        $this->parameters->currency = $currency->value;
-        $this->parameters->merchantCode = $this->redsysClient->merchantCode;
-        $this->parameters->order = $orderNumber;
-        $this->parameters->terminal = $this->redsysClient->terminal;
-        $this->parameters->transactionType = $transactionType->value;
-
-        $this->signature = Signature::calculateSignature(
-            encodedParameters: $this->parameters->toEncodedString(),
-            order: $this->parameters->order,
-            secretKey: $this->redsysClient->secretKey,
-        );
-
-        return $this->getRequestFieldsArray();
-    }
-
-    private function formatAmount(float $amount): int
-    {
-        return number_format(round($amount, 2) * 100, 0, '', '');
-    }
-
-    #[ArrayShape(['Ds_SignatureVersion' => "string", 'Ds_MerchantParameters' => "string", 'Ds_Signature' => "string"])]
      public function getRequestFieldsArray(): array
      {
+         $this->signature = Signature::calculateSignature(
+             encodedParameters: $this->parameters->toEncodedString(),
+             order: $this->parameters->order,
+             secretKey: $this->redsysClient->secretKey,
+         );
+
          return [
              'Ds_SignatureVersion' => $this->redsysClient->signatureVersion,
              'Ds_MerchantParameters' => $this->parameters->toEncodedString(),
@@ -64,12 +77,8 @@ class RedsysRequest
          ];
      }
 
-    public function getFormHtml(): string
+    public function getRedirectFormHtml(): string
     {
-        if (empty($this->signature)) {
-            throw new Exception('');
-        }
-
         $formFields = $this->getRequestFieldsArray();
 
         return <<<HTML
@@ -80,5 +89,22 @@ class RedsysRequest
             </form>
             <script>document.forms[0].submit();</script>
         HTML;
+    }
+
+    public function sendPostRequest(): \Psr\Http\Message\ResponseInterface
+    {
+        $client = new Client();
+        $this->parameters->directPayment = DirectPayment::True;
+
+        $request = new Request(
+            'POST',
+            $this->redsysClient->getRestBaseUrl() . '/trataPeticionREST',
+            ["Content-Type" => 'application/json'],
+            json_encode($this->getRequestFieldsArray())
+        );
+
+        $response = $client->send($request);
+
+        return $response;
     }
 }

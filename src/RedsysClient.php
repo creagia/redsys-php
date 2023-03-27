@@ -38,4 +38,21 @@ class RedsysClient
 
         throw new \Exception('Redsys undefined environment');
     }
+
+    public function getRestBaseUrl(): string
+    {
+        if ($this->environment === Environment::Production) {
+            return 'https://sis.redsys.es/sis/rest';
+        }
+
+        if ($this->environment === Environment::Test) {
+            return 'https://sis-t.redsys.es:25443/sis/rest';
+        }
+
+        if ($this->environment === Environment::Custom) {
+            return $this->customBaseUrl;
+        }
+
+        throw new \Exception('Redsys undefined environment');
+    }
 }

@@ -54,7 +54,7 @@ class RedsysFakeGateway
         return [
             'Ds_Date' => (new DateTime())->format('d/m/Y'),
             'Ds_Hour' => (new DateTime())->format('H:i'),
-            'Ds_Amount' => $inputParameters->amount,
+            'Ds_Amount' => $inputParameters->amountInCents,
             'Ds_Currency' => $inputParameters->currency,
             'Ds_Order' => $inputParameters->order,
             'Ds_MerchantCode' => $inputParameters->merchantCode,
