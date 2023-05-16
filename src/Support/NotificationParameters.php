@@ -2,8 +2,7 @@
 
 namespace Creagia\Redsys\Support;
 
-use Creagia\Redsys\Casters\NotificationAmountCaster;
-use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Attributes\MapTo;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class NotificationParameters extends DataTransferObject
@@ -15,8 +14,7 @@ class NotificationParameters extends DataTransferObject
     public string $hour;
 
     #[MapTo('DS_AMOUNT')]
-    #[CastWith(NotificationAmountCaster::class)]
-    public float $amount;
+    public int $amount;
 
     #[MapTo('DS_CURRENCY')]
     public int $currency;
@@ -55,19 +53,55 @@ class NotificationParameters extends DataTransferObject
     public ?string $cardType;
 
     #[MapTo('DS_CARD_BRAND')]
-    public ?string $cardBrand;
+    public ?int $cardBrand;
+
+    #[MapTo('DS_CARD_NUMBER')]
+    public ?string $cardNumber;
+
+    #[MapTo('DS_EXPIRYDATE')]
+    public ?int $cardExpiryDate;
+
+    #[MapTo('DS_MERCHANT_IDENTIFIER')]
+    public ?string $merchantIdentifier;
 
     #[MapTo('DS_ERRORCODE')]
     public ?string $errorCode;
 
+    #[MapTo('DS_URLPAGO2FASES')]
+    public ?string $payGoldPayUrl;
+
+    #[MapTo('DS_SIGNATURE')]
+    public ?string $responseSignature;
+
+    #[MapTo('DS_DCC')]
+    public ?string $dcc;
+
     #[MapTo('DS_EMV3DS')]
-    public ?string $EMV3DS;
+    public ?string $emv3;
+
+    #[MapTo('DS_CARD_PSD2')]
+    public ?string $psd2CardAffected;
 
     #[MapTo('DS_EXCEP_SCA')]
-    public ?string $excepSCA;
+    public ?string $scaException;
 
     #[MapTo('DS_PROCESSEDPAYMETHOD')]
-    public ?string $processedPayMethod;
+    public ?string $cofProcessedPayMethod;
+
+    #[MapTo('DS_MERCHANT_COF_TXNID')]
+    public ?string $cofTransactionId;
+
+    #[MapTo('DS_AMOUNT_DCC')]
+    public ?string $dccAmount;
+
+    #[MapTo('DS_AMOUNT_EURO')]
+    public ?string $dccEuroAmount;
+
+    #[MapTo('DS_CURRENCY_DCC')]
+    public ?string $dccCurrency;
+
+    #[MapTo('RTS')]
+    public ?string $rts;
 
     public static function fromArray(array $parameters): NotificationParameters
     {

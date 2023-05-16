@@ -13,39 +13,42 @@ beforeEach(function () {
         terminal: 1,
         environment: \Creagia\Redsys\Enums\Environment::Production
     );
-    $this->redsysRequest = new \Creagia\Redsys\RedsysRequest($this->redsysClient);
 });
 
 it('can create redirect form', function () {
-    $this->redsysRequest->createPaymentRequest(
-        amount: 123.12,
-        orderNumber: 9999,
-        currency: Currency::EUR,
-        transactionType: TransactionType::Autorizacion
+    $redsysRequest = \Creagia\Redsys\RedsysRequest::create(
+        $this->redsysClient,
+        new RequestParameters(
+            amountInCents: 123_12,
+            order: 9999,
+            currency: Currency::EUR,
+            transactionType: TransactionType::Autorizacion,
+        )
     );
 
-    $redirectForm = $this->redsysRequest->getFormHtml();
+    $redirectForm = $redsysRequest->getRedirectFormHtml();
 
     $this->assertStringContainsString('realizarPago', $redirectForm);
 });
 
 it('can create redirect with extra parameters', function () {
-    $this->redsysRequest->createPaymentRequest(
-        amount: 123.12,
-        orderNumber: 9999,
-        currency: Currency::EUR,
-        transactionType: TransactionType::Autorizacion,
-        requestParameters: new RequestParameters(
+    $redsysRequest = \Creagia\Redsys\RedsysRequest::create(
+        $this->redsysClient,
+        new RequestParameters(
+            amountInCents: 123_12,
+            order: 9999,
+            currency: Currency::EUR,
+            transactionType: TransactionType::Autorizacion,
             merchantUrl: 'https://example.com/redsysNotification',
             urlOk: 'https://example.com/paymentOk',
             urlKo: 'https://example.com/paymentKo',
-            consumerLanguage: ConsumerLanguage::Auto->value,
-            payMethods: PayMethod::Card->value,
+            consumerLanguage: ConsumerLanguage::Auto,
+            payMethods: PayMethod::Card,
             productDescription: 'Product description',
-        ),
+        )
     );
 
-    $redirectForm = $this->redsysRequest->getFormHtml();
+    $redirectForm = $redsysRequest->getRedirectFormHtml();
 
     $this->assertStringContainsString('realizarPago', $redirectForm);
 });

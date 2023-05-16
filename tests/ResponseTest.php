@@ -8,15 +8,17 @@ beforeEach(function () {
         environment: \Creagia\Redsys\Enums\Environment::Production,
     );
 
-    $redsysRequest = new \Creagia\Redsys\RedsysRequest($this->redsysClient);
-    $this->paymentRequestFields = $redsysRequest->createPaymentRequest(
-        amount: $this->paymentRequestAmount = 123.12,
-        orderNumber: 9999,
-        currency: \Creagia\Redsys\Enums\Currency::EUR,
-        transactionType: \Creagia\Redsys\Enums\TransactionType::AutenticacionPuce
+    $redsysRequest = \Creagia\Redsys\RedsysRequest::create(
+        $this->redsysClient,
+        new \Creagia\Redsys\Support\RequestParameters(
+            amountInCents: $this->paymentRequestAmount = 123_12,
+            order: 9999,
+            currency: \Creagia\Redsys\Enums\Currency::EUR,
+            transactionType: \Creagia\Redsys\Enums\TransactionType::AutenticacionPuce,
+        )
     );
 
-    $this->redsysFakeGateway = new \Creagia\Redsys\RedsysFakeGateway($this->paymentRequestFields, 123123);
+    $this->redsysFakeGateway = new \Creagia\Redsys\RedsysFakeGateway($redsysRequest->getRequestFieldsArray(), 123123);
 });
 
 it('can validate a valid signature', function () {

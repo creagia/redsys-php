@@ -3,6 +3,7 @@
 namespace Creagia\Redsys;
 
 use Creagia\Redsys\Enums\CardBrand;
+use Creagia\Redsys\Enums\CofInitial;
 use Creagia\Redsys\Enums\ProcessedPayMethod;
 use Creagia\Redsys\Support\RequestParameters;
 use Creagia\Redsys\Support\Signature;
@@ -51,10 +52,10 @@ class RedsysFakeGateway
 
     private function getResponseParameters(RequestParameters $inputParameters)
     {
-        return [
+        $returnParameters = [
             'Ds_Date' => (new DateTime())->format('d/m/Y'),
             'Ds_Hour' => (new DateTime())->format('H:i'),
-            'Ds_Amount' => $inputParameters->amount,
+            'Ds_Amount' => $inputParameters->amountInCents,
             'Ds_Currency' => $inputParameters->currency,
             'Ds_Order' => $inputParameters->order,
             'Ds_MerchantCode' => $inputParameters->merchantCode,
@@ -73,5 +74,24 @@ class RedsysFakeGateway
 //           'Ds_Excep_SCA' => '',
             'Ds_ProcessedPayMethod' => ProcessedPayMethod::VisaSecure,
         ];
+
+        if (
+            $inputParameters->cofIni === CofInitial::Yes
+        ) {
+            $returnParameters['Ds_Merchant_Cof_Txnid'] = '2006031152000';
+            $returnParameters['Ds_Merchant_Identifier'] = '120c14ed9f7264383434fc1154559f1e2bcc2b1c';
+            $returnParameters['Ds_Card_Number'] = '454881******0003';
+            $returnParameters['Ds_ExpiryDate'] = '3412';
+        }
+
+        if (
+            $inputParameters->cofIni === CofInitial::No
+            and $inputParameters->merchantIdentifier
+        ) {
+            $returnParameters['Ds_Card_Number'] = '454881******0003';
+            $returnParameters['Ds_Merchant_Cof_Txnid'] = '2006031152000';
+        }
+
+        return $returnParameters;
     }
 }

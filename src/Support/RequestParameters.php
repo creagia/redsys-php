@@ -2,37 +2,58 @@
 
 namespace Creagia\Redsys\Support;
 
+use Creagia\Redsys\Enums\CofInitial;
+use Creagia\Redsys\Enums\CofType;
+use Creagia\Redsys\Enums\ConsumerLanguage;
+use Creagia\Redsys\Enums\Currency;
+use Creagia\Redsys\Enums\DirectPayment;
+use Creagia\Redsys\Enums\PayMethod;
+use Creagia\Redsys\Enums\TransactionType;
+use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Attributes\MapTo;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class RequestParameters extends DataTransferObject
 {
     #[MapTo('DS_MERCHANT_AMOUNT')]
-    public ?int $amount;
+    public int $amountInCents;
+
+    #[MapTo('DS_MERCHANT_TRANSACTIONTYPE')]
+    #[CastWith(EnumCaster::class, TransactionType::class)]
+    public TransactionType $transactionType;
+
+    #[MapTo('DS_MERCHANT_CURRENCY')]
+    #[CastWith(EnumCaster::class, Currency::class)]
+    public Currency $currency;
+
+    #[MapTo('DS_MERCHANT_ORDER')]
+    public ?string $order;
 
     #[MapTo('DS_MERCHANT_AUTHORISATIONCODE')]
     public ?string $authorisationCode;
 
     #[MapTo('DS_MERCHANT_COF_INI')]
-    public ?string $cofIni;
+    #[CastWith(EnumCaster::class, CofInitial::class)]
+    public ?CofInitial $cofIni;
 
     #[MapTo('DS_MERCHANT_COF_TXNID')]
-    public ?string $cofTxnId;
+    public ?string $cofTransactionId;
 
     #[MapTo('DS_MERCHANT_COF_TYPE')]
-    public ?string $cofType;
+    #[CastWith(EnumCaster::class, CofType::class)]
+    public ?CofType $cofType;
 
     #[MapTo('DS_MERCHANT_CONSUMERLANGUAGE')]
-    public ?string $consumerLanguage;
-
-    #[MapTo('DS_MERCHANT_CURRENCY')]
-    public ?int $currency;
+    #[CastWith(EnumCaster::class, ConsumerLanguage::class)]
+    public ?ConsumerLanguage $consumerLanguage;
 
     #[MapTo('DS_MERCHANT_CVV2')]
     public ?string $cvv2;
 
     #[MapTo('DS_MERCHANT_DIRECTPAYMENT')]
-    public ?string $directPayment;
+    #[CastWith(EnumCaster::class, DirectPayment::class)]
+    public ?DirectPayment $directPayment;
 
     #[MapTo('DS_MERCHANT_EMV3DS')]
     public ?string $emv3ds;
@@ -44,7 +65,7 @@ class RequestParameters extends DataTransferObject
     public ?string $group;
 
     #[MapTo('DS_MERCHANT_IDENTIFIER')]
-    public ?string $identifier;
+    public ?string $merchantIdentifier;
 
     #[MapTo('DS_MERCHANT_IDOPER')]
     public ?string $idOper;
@@ -61,14 +82,12 @@ class RequestParameters extends DataTransferObject
     #[MapTo('DS_MERCHANT_MERCHANTURL')]
     public ?string $merchantUrl;
 
-    #[MapTo('DS_MERCHANT_ORDER')]
-    public ?string $order;
-
     #[MapTo('DS_MERCHANT_PAN')]
     public ?string $pan;
 
     #[MapTo('DS_MERCHANT_PAYMETHODS')]
-    public ?string $payMethods;
+    #[CastWith(EnumCaster::class, PayMethod::class)]
+    public ?PayMethod $payMethods;
 
     #[MapTo('DS_MERCHANT_PRODUCTDESCRIPTION')]
     public ?string $productDescription;
@@ -84,9 +103,6 @@ class RequestParameters extends DataTransferObject
 
     #[MapTo('DS_MERCHANT_TRANSACTIONDATE')]
     public ?string $transactionDate;
-
-    #[MapTo('DS_MERCHANT_TRANSACTIONTYPE')]
-    public ?string $transactionType;
 
     #[MapTo('DS_MERCHANT_URLOK')]
     public ?string $urlOk;

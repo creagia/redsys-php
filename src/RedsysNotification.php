@@ -39,9 +39,9 @@ class RedsysNotification
     public function checkResponse(): NotificationParameters
     {
         // Error SIS. Not necessary on redirection
-//        if (isset($this->$this->merchantParametersArray['Ds_ErrorCode'])) {
-//            throw new ErrorRedsysResponseNotification('Redsys: received error code ' . $this->$this->merchantParametersArray['Ds_ErrorCode']);
-//        }
+        //        if (isset($this->$this->merchantParametersArray['Ds_ErrorCode'])) {
+        //            throw new ErrorRedsysResponseNotification('Redsys: received error code ' . $this->$this->merchantParametersArray['Ds_ErrorCode']);
+        //        }
 
         $expectedSignature = Signature::calculateSignature(
             encodedParameters: $this->originalEncodedMerchantParameters,
