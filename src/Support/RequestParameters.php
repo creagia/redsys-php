@@ -2,7 +2,6 @@
 
 namespace Creagia\Redsys\Support;
 
-use Creagia\Redsys\Casters\EnumCaster;
 use Creagia\Redsys\Enums\CofInitial;
 use Creagia\Redsys\Enums\CofType;
 use Creagia\Redsys\Enums\ConsumerLanguage;
@@ -12,6 +11,7 @@ use Creagia\Redsys\Enums\PayMethod;
 use Creagia\Redsys\Enums\TransactionType;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Attributes\MapTo;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 use Spatie\DataTransferObject\DataTransferObject;
 
 class RequestParameters extends DataTransferObject
