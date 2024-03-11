@@ -60,20 +60,20 @@ class RedsysRequest
     }
 
     #[ArrayShape(['Ds_SignatureVersion' => "string", 'Ds_MerchantParameters' => "string", 'Ds_Signature' => "string"])]
-     public function getRequestFieldsArray(): array
-     {
-         $this->signature = Signature::calculateSignature(
-             encodedParameters: $this->parameters->toEncodedString(),
-             order: $this->parameters->order,
-             secretKey: $this->redsysClient->secretKey,
-         );
+    public function getRequestFieldsArray(): array
+    {
+        $this->signature = Signature::calculateSignature(
+            encodedParameters: $this->parameters->toEncodedString(),
+            order: $this->parameters->order,
+            secretKey: $this->redsysClient->secretKey,
+        );
 
-         return [
-             'Ds_SignatureVersion' => $this->redsysClient->signatureVersion,
-             'Ds_MerchantParameters' => $this->parameters->toEncodedString(),
-             'Ds_Signature' => $this->signature,
-         ];
-     }
+        return [
+            'Ds_SignatureVersion' => $this->redsysClient->signatureVersion,
+            'Ds_MerchantParameters' => $this->parameters->toEncodedString(),
+            'Ds_Signature' => $this->signature,
+        ];
+    }
 
     public function getRedirectFormHtml(): string
     {
