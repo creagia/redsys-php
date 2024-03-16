@@ -8,10 +8,10 @@ use Spatie\DataTransferObject\DataTransferObject;
 class NotificationParameters extends DataTransferObject
 {
     #[MapTo('DS_DATE')]
-    public string $date;
+    public ?string $date;
 
     #[MapTo('DS_HOUR')]
-    public string $hour;
+    public ?string $hour;
 
     #[MapTo('DS_AMOUNT')]
     public int $amount;

@@ -117,9 +117,9 @@ Keep in mind that Redsys won't notify you on abandoned payments so this `merchan
 request created. Only when the payment finishes. You should take care of abandoned/pending requests.
 
 ```php
-use Creagia\Redsys\Exceptions\DeniedRedsysPaymentNotification;
+use Creagia\Redsys\Exceptions\DeniedRedsysPaymentResponseException;
 use Creagia\Redsys\RedsysClient;
-use Creagia\Redsys\RedsysNotification;
+use Creagia\Redsys\RedsysResponse;
 
 $redsysClient = new RedsysClient(
     merchantCode: env('redsys.merchantCode'),
@@ -128,7 +128,7 @@ $redsysClient = new RedsysClient(
     environment: \Creagia\Redsys\Enums\Environment::Test,
 );
 
-$redsysNotification = new RedsysNotification($redsysClient);
+$redsysNotification = new RedsysResponse($redsysClient);
 $redsysNotification->setParametersFromResponse($_POST);
 
 // If you need it, prior to checking response, you can use the decoded data from
@@ -137,7 +137,7 @@ $redsysNotification->setParametersFromResponse($_POST);
 try {
     $notificationData = $redsysNotification->checkResponse();
     // Authorised payment
-} catch (DeniedRedsysPaymentNotification $e) {
+} catch (DeniedRedsysPaymentResponseException $e) {
     $errorMessage = $e->getMessage();
     // Denied payment with $errorMessage
 }

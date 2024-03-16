@@ -24,7 +24,7 @@ beforeEach(function () {
 it('can validate a valid signature', function () {
     $responsePost = $this->redsysFakeGateway->getResponse('0000');
 
-    $redsysNotification = new \Creagia\Redsys\RedsysNotification($this->redsysClient);
+    $redsysNotification = new \Creagia\Redsys\RedsysResponse($this->redsysClient);
     $redsysNotification->setParametersFromResponse($responsePost);
     $result = $redsysNotification->checkResponse();
 
@@ -35,21 +35,21 @@ it('fails if signatures differ', function () {
     $responsePost = $this->redsysFakeGateway->getResponse('0000');
     $responsePost['Ds_Signature'] = "123";
 
-    $redsysNotification = new \Creagia\Redsys\RedsysNotification($this->redsysClient);
+    $redsysNotification = new \Creagia\Redsys\RedsysResponse($this->redsysClient);
     $redsysNotification->setParametersFromResponse($responsePost);
     $redsysNotification->checkResponse();
-})->throws(\Creagia\Redsys\Exceptions\InvalidRedsysNotification::class, 'does not match');
+})->throws(\Creagia\Redsys\Exceptions\InvalidRedsysResponseException::class, 'does not match');
 
 it('throws an exception if invalid response from Redsys', function () {
-    $redsysNotification = new \Creagia\Redsys\RedsysNotification($this->redsysClient);
+    $redsysNotification = new \Creagia\Redsys\RedsysResponse($this->redsysClient);
     $redsysNotification->setParametersFromResponse([]);
     $redsysNotification->checkResponse();
-})->throws(\Creagia\Redsys\Exceptions\InvalidRedsysNotification::class);
+})->throws(\Creagia\Redsys\Exceptions\InvalidRedsysResponseException::class);
 
 it('throws an exception if denied response from Redsys', function () {
     $responsePost = $this->redsysFakeGateway->getResponse('0184');
 
-    $redsysNotification = new \Creagia\Redsys\RedsysNotification($this->redsysClient);
+    $redsysNotification = new \Creagia\Redsys\RedsysResponse($this->redsysClient);
     $redsysNotification->setParametersFromResponse($responsePost);
     $redsysNotification->checkResponse();
-})->throws(\Creagia\Redsys\Exceptions\DeniedRedsysPaymentNotification::class);
+})->throws(\Creagia\Redsys\Exceptions\DeniedRedsysPaymentResponseException::class);

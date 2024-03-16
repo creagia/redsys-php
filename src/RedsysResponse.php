@@ -2,13 +2,15 @@
 
 namespace Creagia\Redsys;
 
-use Creagia\Redsys\Exceptions\DeniedRedsysPaymentNotification;
-use Creagia\Redsys\Exceptions\InvalidRedsysNotification;
+use Creagia\Redsys\Exceptions\DeniedRedsysPaymentResponseException;
+use Creagia\Redsys\Exceptions\ErrorRedsysResponseException;
+use Creagia\Redsys\Exceptions\InvalidRedsysResponseException;
+use Creagia\Redsys\ResponseCodes\ErrorCode;
 use Creagia\Redsys\ResponseCodes\ResponseCode;
 use Creagia\Redsys\Support\NotificationParameters;
 use Creagia\Redsys\Support\Signature;
 
-class RedsysNotification
+class RedsysResponse
 {
     public array $merchantParametersArray;
     public string $receivedSignature;
@@ -22,12 +24,19 @@ class RedsysNotification
 
     public function setParametersFromResponse(array $data): void
     {
+        if (isset($data['errorCode'])) {
+            throw new ErrorRedsysResponseException(
+                $data['errorCode'],
+                ErrorCode::fromCode($data['errorCode']),
+            );
+        }
+
         if (
             empty($data['Ds_SignatureVersion'])
             or empty($data['Ds_MerchantParameters'])
             or empty($data['Ds_Signature'])
         ) {
-            throw new InvalidRedsysNotification('Redsys: invalid response from bank.');
+            throw new InvalidRedsysResponseException('Redsys: invalid response from bank.');
         }
 
         $this->originalEncodedMerchantParameters = $data['Ds_MerchantParameters'];
@@ -38,10 +47,12 @@ class RedsysNotification
 
     public function checkResponse(): NotificationParameters
     {
-        // Error SIS. Not necessary on redirection
-        //        if (isset($this->$this->merchantParametersArray['Ds_ErrorCode'])) {
-        //            throw new ErrorRedsysResponseNotification('Redsys: received error code ' . $this->$this->merchantParametersArray['Ds_ErrorCode']);
-        //        }
+        if (isset($this->merchantParametersArray['Ds_ErrorCode'])) {
+            throw new ErrorRedsysResponseException(
+                $this->merchantParametersArray['Ds_ErrorCode'],
+                ErrorCode::fromCode($this->merchantParametersArray['Ds_ErrorCode']),
+            );
+        }
 
         $expectedSignature = Signature::calculateSignature(
             encodedParameters: $this->originalEncodedMerchantParameters,
@@ -50,13 +61,16 @@ class RedsysNotification
         );
 
         if (strtr($this->receivedSignature, '-_', '+/') !== $expectedSignature) {
-            throw new InvalidRedsysNotification("Redsys: invalid response. Signatures does not match.");
+            throw new InvalidRedsysResponseException("Redsys: invalid response. Signatures does not match.");
         }
 
         $responseCode = (int) $this->parameters->responseCode;
 
         if (! self::isAuthorisedCode($responseCode)) {
-            throw new DeniedRedsysPaymentNotification(ResponseCode::fromCode($this->parameters->responseCode));
+            throw new DeniedRedsysPaymentResponseException(
+                $this->parameters->responseCode,
+                ResponseCode::fromCode($this->parameters->responseCode),
+            );
         }
 
         return $this->parameters;

@@ -6,9 +6,16 @@ use Creagia\Redsys\Enums\CofInitial;
 use Creagia\Redsys\Enums\CofType;
 use Creagia\Redsys\Enums\DirectPayment;
 use Creagia\Redsys\Enums\MerchantIdentifier;
+use Creagia\Redsys\Exceptions\DeniedRedsysPaymentResponseException;
+use Creagia\Redsys\Exceptions\ErrorRedsysResponseException;
+use Creagia\Redsys\Exceptions\InvalidRedsysResponseException;
+use Creagia\Redsys\Exceptions\RedsysCodeException;
+use Creagia\Redsys\Support\NotificationParameters;
+use Creagia\Redsys\Support\PostRequestError;
 use Creagia\Redsys\Support\RequestParameters;
 use Creagia\Redsys\Support\Signature;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use JetBrains\PhpStorm\ArrayShape;
 
@@ -89,7 +96,13 @@ class RedsysRequest
         HTML;
     }
 
-    public function sendPostRequest(): \Psr\Http\Message\ResponseInterface
+    /**
+     * @throws DeniedRedsysPaymentResponseException
+     * @throws ErrorRedsysResponseException
+     * @throws GuzzleException
+     * @throws InvalidRedsysResponseException
+     */
+    public function sendPostRequest(): NotificationParameters|PostRequestError
     {
         $client = new Client();
         $this->parameters->directPayment = DirectPayment::True;
@@ -102,7 +115,17 @@ class RedsysRequest
         );
 
         $response = $client->send($request);
+        $responseContents = (array) json_decode($response->getBody()->getContents());
+        $redsysResponse = new RedsysResponse($this->redsysClient);
 
-        return $response;
+        try {
+            $redsysResponse->setParametersFromResponse($responseContents);
+            return $redsysResponse->checkResponse();
+        } catch (RedsysCodeException $exception) {
+            return new PostRequestError(
+                code: $exception->redsysCode,
+                message: $exception->getMessage(),
+            );
+        }
     }
 }
