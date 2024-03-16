@@ -120,6 +120,7 @@ class RedsysRequest
 
         try {
             $redsysResponse->setParametersFromResponse($responseContents);
+
             return $redsysResponse->checkResponse();
         } catch (RedsysCodeException $exception) {
             return new PostRequestError(
