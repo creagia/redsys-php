@@ -42,6 +42,8 @@ class RedsysResponse
         $this->originalEncodedMerchantParameters = $data['Ds_MerchantParameters'];
         $this->merchantParametersArray = json_decode(urldecode(base64_decode(strtr($data['Ds_MerchantParameters'], '-_', '+/'))), true);
         $this->receivedSignature = $data['Ds_Signature'];
+//        var_dump($this->merchantParametersArray);
+//        die('a');
         $this->parameters = NotificationParameters::fromArray($this->merchantParametersArray);
     }
 

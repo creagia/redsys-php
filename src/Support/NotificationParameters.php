@@ -2,120 +2,108 @@
 
 namespace Creagia\Redsys\Support;
 
-use Spatie\DataTransferObject\Attributes\MapTo;
-use Spatie\DataTransferObject\DataTransferObject;
+use Creagia\Redsys\Support\DataTransferObject\DataTransferObject;
+use Creagia\Redsys\Support\DataTransferObject\MapFrom;
 
 class NotificationParameters extends DataTransferObject
 {
-    #[MapTo('DS_DATE')]
-    public ?string $date;
+    public function __construct(
+        #[MapFrom('DS_AMOUNT')]
+        public int $amount,
 
-    #[MapTo('DS_HOUR')]
-    public ?string $hour;
+        #[MapFrom('DS_CURRENCY')]
+        public int $currency,
 
-    #[MapTo('DS_AMOUNT')]
-    public int $amount;
+        #[MapFrom('DS_ORDER')]
+        public string $order,
 
-    #[MapTo('DS_CURRENCY')]
-    public int $currency;
+        #[MapFrom('DS_MERCHANTCODE')]
+        public string $merchantCode,
 
-    #[MapTo('DS_ORDER')]
-    public string $order;
+        #[MapFrom('DS_TERMINAL')]
+        public int $terminal,
 
-    #[MapTo('DS_MERCHANTCODE')]
-    public string $merchantCode;
+        #[MapFrom('DS_RESPONSE')]
+        public string $responseCode,
 
-    #[MapTo('DS_TERMINAL')]
-    public int $terminal;
+        #[MapFrom('DS_SECUREPAYMENT')]
+        public string $securePayment,
 
-    #[MapTo('DS_RESPONSE')]
-    public string $responseCode;
+        #[MapFrom('DS_DATE')]
+        public ?string $date = null,
 
-    #[MapTo('DS_MERCHANTDATA')]
-    public ?string $merchantData;
+        #[MapFrom('DS_HOUR')]
+        public ?string $hour = null,
 
-    #[MapTo('DS_SECUREPAYMENT')]
-    public string $securePayment;
+        #[MapFrom('DS_MERCHANTDATA')]
+        public ?string $merchantData = null,
 
-    #[MapTo('DS_TRANSACTIONTYPE')]
-    public ?string $transactionType;
+        #[MapFrom('DS_TRANSACTIONTYPE')]
+        public ?string $transactionType = null,
 
-    #[MapTo('DS_CARD_COUNTRY')]
-    public ?string $cardCountry;
+        #[MapFrom('DS_CARD_COUNTRY')]
+        public ?string $cardCountry = null,
 
-    #[MapTo('DS_AUTHORISATIONCODE')]
-    public ?string $responseAuthorisationCode;
+        #[MapFrom('DS_AUTHORISATIONCODE')]
+        public ?string $responseAuthorisationCode = null,
 
-    #[MapTo('DS_CONSUMERLANGUAGE')]
-    public ?string $consumerLanguage;
+        #[MapFrom('DS_CONSUMERLANGUAGE')]
+        public ?string $consumerLanguage = null,
 
-    #[MapTo('DS_CARD_TYPE')]
-    public ?string $cardType;
+        #[MapFrom('DS_CARD_TYPE')]
+        public ?string $cardType = null,
 
-    #[MapTo('DS_CARD_BRAND')]
-    public ?int $cardBrand;
+        #[MapFrom('DS_CARD_BRAND')]
+        public ?int $cardBrand = null,
 
-    #[MapTo('DS_CARD_NUMBER')]
-    public ?string $cardNumber;
+        #[MapFrom('DS_CARD_NUMBER')]
+        public ?string $cardNumber = null,
 
-    #[MapTo('DS_EXPIRYDATE')]
-    public ?int $cardExpiryDate;
+        #[MapFrom('DS_EXPIRYDATE')]
+        public ?int $cardExpiryDate = null,
 
-    #[MapTo('DS_MERCHANT_IDENTIFIER')]
-    public ?string $merchantIdentifier;
+        #[MapFrom('DS_MERCHANT_IDENTIFIER')]
+        public ?string $merchantIdentifier = null,
 
-    #[MapTo('DS_ERRORCODE')]
-    public ?string $errorCode;
+        #[MapFrom('DS_ERRORCODE')]
+        public ?string $errorCode = null,
 
-    #[MapTo('DS_URLPAGO2FASES')]
-    public ?string $payGoldPayUrl;
+        #[MapFrom('DS_URLPAGO2FASES')]
+        public ?string $payGoldPayUrl = null,
 
-    #[MapTo('DS_SIGNATURE')]
-    public ?string $responseSignature;
+        #[MapFrom('DS_SIGNATURE')]
+        public ?string $responseSignature = null,
 
-    #[MapTo('DS_DCC')]
-    public ?string $dcc;
+        #[MapFrom('DS_DCC')]
+        public ?string $dcc = null,
 
-    #[MapTo('DS_EMV3DS')]
-    public ?string $emv3;
+        #[MapFrom('DS_EMV3DS')]
+        public ?string $emv3 = null,
 
-    #[MapTo('DS_CARD_PSD2')]
-    public ?string $psd2CardAffected;
+        #[MapFrom('DS_CARD_PSD2')]
+        public ?string $psd2CardAffected = null,
 
-    #[MapTo('DS_EXCEP_SCA')]
-    public ?string $scaException;
+        #[MapFrom('DS_EXCEP_SCA')]
+        public ?string $scaException = null,
 
-    #[MapTo('DS_PROCESSEDPAYMETHOD')]
-    public ?string $cofProcessedPayMethod;
+        #[MapFrom('DS_PROCESSEDPAYMETHOD')]
+        public ?string $cofProcessedPayMethod = null,
 
-    #[MapTo('DS_MERCHANT_COF_TXNID')]
-    public ?string $cofTransactionId;
+        #[MapFrom('DS_MERCHANT_COF_TXNID')]
+        public ?string $cofTransactionId = null,
 
-    #[MapTo('DS_AMOUNT_DCC')]
-    public ?string $dccAmount;
+        #[MapFrom('DS_AMOUNT_DCC')]
+        public ?string $dccAmount = null,
 
-    #[MapTo('DS_AMOUNT_EURO')]
-    public ?string $dccEuroAmount;
+        #[MapFrom('DS_AMOUNT_EURO')]
+        public ?string $dccEuroAmount = null,
 
-    #[MapTo('DS_CURRENCY_DCC')]
-    public ?string $dccCurrency;
+        #[MapFrom('DS_CURRENCY_DCC')]
+        public ?string $dccCurrency = null,
 
-    #[MapTo('RTS')]
-    public ?string $rts;
-
-    public static function fromArray(array $parameters): NotificationParameters
-    {
-        $castedParameters = [];
-        foreach ($parameters as $key => $value) {
-            $castedParameters[NotificationParametersFields::$relation[strtoupper($key)] ?? $key] = $value;
-        }
-
-        return new NotificationParameters(...$castedParameters);
-    }
-
-    public function toEncodedString(): string
-    {
-        return base64_encode(json_encode($this->toArray()));
+        #[MapFrom('RTS')]
+        public ?string $rts = null,
+    ) {
     }
 
     public function toArray(): array

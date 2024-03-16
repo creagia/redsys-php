@@ -14,7 +14,7 @@ beforeEach(function () {
             amountInCents: $this->paymentRequestAmount = 123_12,
             order: 9999,
             currency: \Creagia\Redsys\Enums\Currency::EUR,
-            transactionType: \Creagia\Redsys\Enums\TransactionType::AutenticacionPuce,
+            transactionType: \Creagia\Redsys\Enums\TransactionType::Autorizacion,
         )
     );
 
