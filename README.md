@@ -4,15 +4,9 @@
 [![Tests](https://github.com/creagia/redsys-php/actions/workflows/run-tests.yml/badge.svg?branch=main)](https://github.com/creagia/redsys-php/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/creagia/redsys-php.svg?style=flat-square)](https://packagist.org/packages/creagia/redsys-php)
 
-Integrate your PHP code with Redsys, the lead payments gateway in Spain. 
-
-This package uses some PHP 8.1 features, so it only supports `php:^8.1`. If you need compatibility with older versions, 
-check the [alternatives](#alternatives) section.
+Integrate your PHP code with Redsys, the lead payments gateway in Spain.
 
 > If you are using Laravel, check our other package **[creagia/laravel-redsys](https://github.com/creagia/laravel-redsys)** for a ready-to-use integration.
-
-## Support us
-[<img width="570" alt="Laradir banner" src="https://user-images.githubusercontent.com/240932/189903723-2c015907-b8c9-4ff7-b6e6-2c8cf10aea16.png">](https://laradir.com/?utm_campaign=github&utm_medium=banner&utm_term=redsys-php)
 
 ## Installation
 
@@ -123,9 +117,9 @@ Keep in mind that Redsys won't notify you on abandoned payments so this `merchan
 request created. Only when the payment finishes. You should take care of abandoned/pending requests.
 
 ```php
-use Creagia\Redsys\Exceptions\DeniedRedsysPaymentNotification;
+use Creagia\Redsys\Exceptions\DeniedRedsysPaymentResponseException;
 use Creagia\Redsys\RedsysClient;
-use Creagia\Redsys\RedsysNotification;
+use Creagia\Redsys\RedsysResponse;
 
 $redsysClient = new RedsysClient(
     merchantCode: env('redsys.merchantCode'),
@@ -134,7 +128,7 @@ $redsysClient = new RedsysClient(
     environment: \Creagia\Redsys\Enums\Environment::Test,
 );
 
-$redsysNotification = new RedsysNotification($redsysClient);
+$redsysNotification = new RedsysResponse($redsysClient);
 $redsysNotification->setParametersFromResponse($_POST);
 
 // If you need it, prior to checking response, you can use the decoded data from
@@ -143,7 +137,7 @@ $redsysNotification->setParametersFromResponse($_POST);
 try {
     $notificationData = $redsysNotification->checkResponse();
     // Authorised payment
-} catch (DeniedRedsysPaymentNotification $e) {
+} catch (DeniedRedsysPaymentResponseException $e) {
     $errorMessage = $e->getMessage();
     // Denied payment with $errorMessage
 }
