@@ -46,7 +46,7 @@ $redsysRequest = RedsysRequest::create(
     $redsysClient,
     new RequestParameters(
         amountInCents: 123_45,
-        orderNumber: '22013100005',
+        order: '22013100005',
         currency: Currency::EUR,
         transactionType: TransactionType::Autorizacion,
         merchantUrl: 'https://example.com/redsysNotification',
