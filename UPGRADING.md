@@ -1,5 +1,12 @@
 # Upgrading
 
+## From v2 to v3
+
+Version 3.x now handles responses for POST requests and some classes are renamed to accommodate that:
+
+- Renamed `RedsysNotification` as `RedsysResponse`.
+- Renamed exceptions: All the exceptions have been renamed to include the `*Exception` suffix and replaced `RedsysNotification` as `RedsysResponse`.
+
 ## From v1 to v2
 
 Version 2.x is a complete rewrite, so there isn't a step-by-step upgrade guide. We recommend you to read the updated docs
