@@ -103,6 +103,12 @@ class NotificationParameters extends DataTransferObject
 
         #[MapFrom('RTS')]
         public ?string $rts = null,
+
+        #[MapFrom('DS_ECI')]
+        public ?string $eci = null,
+
+        #[MapFrom('DS_RESPONSE_DESCRIPTION')]
+        public ?string $responseDescription = null,
     ) {
     }
 
