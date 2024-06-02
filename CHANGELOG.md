@@ -2,7 +2,7 @@
 
 All notable changes to `redsys-php` will be documented in this file.
 
-## 3.0.0 - 2024-06-xx
+## 3.0.0 - 2024-06-02
 
 ### New features:
 - POST requests responses are now handled by the package. 
