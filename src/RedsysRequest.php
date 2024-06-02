@@ -97,12 +97,10 @@ class RedsysRequest
     }
 
     /**
-     * @throws DeniedRedsysPaymentResponseException
-     * @throws ErrorRedsysResponseException
      * @throws GuzzleException
      * @throws InvalidRedsysResponseException
      */
-    public function sendPostRequest(): NotificationParameters|PostRequestError
+    public function sendPostRequest(): RedsysResponse|PostRequestError
     {
         $client = new Client();
         $this->parameters->directPayment = DirectPayment::True;
@@ -121,11 +119,12 @@ class RedsysRequest
         try {
             $redsysResponse->setParametersFromResponse($responseContents);
 
-            return $redsysResponse->checkResponse();
+            return $redsysResponse;
         } catch (RedsysCodeException $exception) {
             return new PostRequestError(
                 code: $exception->redsysCode,
                 message: $exception->getMessage(),
+                responseParameters: $responseContents,
             );
         }
     }
