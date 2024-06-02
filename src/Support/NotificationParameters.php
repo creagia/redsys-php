@@ -109,6 +109,8 @@ class NotificationParameters extends DataTransferObject
 
         #[MapFrom('DS_RESPONSE_DESCRIPTION')]
         public ?string $responseDescription = null,
+
+        public ?array $extraParameters = null,
     ) {
     }
 

@@ -39,6 +39,7 @@ abstract class DataTransferObject
         $normalizedParameters = [];
         $propertiesName = [];
         $propertiesCast = [];
+        $extraParameters = [];
         $class = new ReflectionClass(static::class);
         $properties = $class->getProperties();
 
@@ -58,7 +59,20 @@ abstract class DataTransferObject
 
         foreach ($parameters as $key => $value) {
             $caseKey = self::caseSensitive() ? $key : strtoupper($key);
-            $normalizedParameters[$propertiesName[$caseKey] ?? $key] = self::getCastedValue($value, $propertiesCast[$propertiesName[$caseKey]] ?? null);
+            $foundKey = $propertiesName[$caseKey] ?? null;
+            if (! $foundKey) {
+                /**
+                 * Received undefined parameter from Redsys. Probably not documented.
+                 * Please report this at https://github.com/creagia/redsys-php
+                 */
+                $extraParameters[$caseKey] = $value;
+            } else {
+                $normalizedParameters[$propertiesName[$caseKey] ?? $key] = self::getCastedValue($value, $propertiesCast[$propertiesName[$caseKey]] ?? null);
+            }
+        }
+
+        if (! empty($extraParameters)) {
+            $normalizedParameters['extraParameters'] = $extraParameters;
         }
 
         return new static(...$normalizedParameters);
