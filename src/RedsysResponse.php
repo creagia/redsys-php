@@ -33,8 +33,8 @@ class RedsysResponse
 
         if (
             empty($data['Ds_SignatureVersion'])
-            or empty($data['Ds_MerchantParameters'])
-            or empty($data['Ds_Signature'])
+            || empty($data['Ds_MerchantParameters'])
+            || empty($data['Ds_Signature'])
         ) {
             throw new InvalidRedsysResponseException('Redsys: invalid response from bank.');
         }
@@ -78,6 +78,6 @@ class RedsysResponse
 
     public static function isAuthorisedCode(int $responseCode): bool
     {
-        return ! ($responseCode > 99 and $responseCode !== 400 && $responseCode !== 900);
+        return ! ($responseCode > 99 && $responseCode !== 400 && $responseCode !== 900);
     }
 }
