@@ -218,6 +218,6 @@ class RequestParameters extends DataTransferObject
 
     public function toArray(): array
     {
-        return array_filter(parent::toArray());
+        return array_filter(parent::toArray(), [Arr::class, 'filled']);
     }
 }
