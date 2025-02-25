@@ -2,6 +2,16 @@
 
 All notable changes to `redsys-php` will be documented in this file.
 
+## 3.0.2 - 2025-02-25
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/creagia/redsys-php/pull/35
+* Add PHP 8.4 tests by @dtorras in https://github.com/creagia/redsys-php/pull/37
+* refactors to use '||' and '&&' instead of 'and' and 'or' operators by @ordago in https://github.com/creagia/redsys-php/pull/32
+
+**Full Changelog**: https://github.com/creagia/redsys-php/compare/3.0.1...3.0.2
+
 ## 3.0.1 - 2024-07-09
 
 ### What's Changed
