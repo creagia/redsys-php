@@ -86,7 +86,7 @@ class RedsysFakeGateway
 
         if (
             $inputParameters->cofIni === CofInitial::No
-            and $inputParameters->merchantIdentifier
+            && $inputParameters->merchantIdentifier
         ) {
             $returnParameters['Ds_Card_Number'] = '454881******0003';
             $returnParameters['Ds_Merchant_Cof_Txnid'] = '2006031152000';
