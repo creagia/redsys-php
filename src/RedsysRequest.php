@@ -100,7 +100,6 @@ class RedsysRequest
     public function sendPostRequest(): RedsysResponse|PostRequestError
     {
         $client = new Client();
-        $this->parameters->directPayment = DirectPayment::True;
 
         $request = new Request(
             'POST',
