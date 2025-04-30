@@ -9,4 +9,5 @@ enum PayMethod: string
     case Transferencia = 'R';
     case Masterpass = 'N';
     case Card = 'C';
+    case ApplePay_GooglePay = 'xpay';
 }
