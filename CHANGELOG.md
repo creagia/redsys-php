@@ -2,6 +2,18 @@
 
 All notable changes to `redsys-php` will be documented in this file.
 
+## 3.0.3 - 2025-04-30
+
+### What's Changed
+
+* Adding case for Apple Pay / Google Pay by @glijcom in https://github.com/creagia/redsys-php/pull/38
+
+### New Contributors
+
+* @glijcom made their first contribution in https://github.com/creagia/redsys-php/pull/38
+
+**Full Changelog**: https://github.com/creagia/redsys-php/compare/3.0.2...3.0.3
+
 ## 3.0.2 - 2025-02-25
 
 ### What's Changed
