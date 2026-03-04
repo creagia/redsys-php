@@ -206,6 +206,7 @@ function getMerchantParameters(int $order, int $responseCode): string
         "Ds_AuthorisationCode" => "501602",
         "Ds_Card_Brand" => "1",
     ];
+
     return base64_encode(urlencode(json_encode($merchantParameters)));
 
 }
