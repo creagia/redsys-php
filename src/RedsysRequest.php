@@ -12,6 +12,7 @@ use Creagia\Redsys\Support\PostRequestError;
 use Creagia\Redsys\Support\RequestParameters;
 use Creagia\Redsys\Support\Signature;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Request;
 use JetBrains\PhpStorm\ArrayShape;
@@ -21,16 +22,19 @@ class RedsysRequest
     private RedsysClient $redsysClient;
     private RequestParameters $parameters;
     private string $signature;
+    private ClientInterface $client;
 
     public static function create(
         RedsysClient $redsysClient,
-        RequestParameters $requestParameters
+        RequestParameters $requestParameters,
+        ?ClientInterface $client = null
     ): static {
         $request = new RedsysRequest();
         $request->redsysClient = $redsysClient;
         $request->parameters = $requestParameters;
         $request->parameters->merchantCode = $request->redsysClient->merchantCode;
         $request->parameters->terminal = $request->redsysClient->terminal;
+        $request->client = $client ?? new Client();
 
         return $request;
     }
@@ -99,7 +103,6 @@ class RedsysRequest
      */
     public function sendPostRequest(): RedsysResponse|PostRequestError
     {
-        $client = new Client();
         $this->parameters->directPayment = DirectPayment::True;
 
         $request = new Request(
@@ -109,7 +112,7 @@ class RedsysRequest
             json_encode($this->getRequestFieldsArray())
         );
 
-        $response = $client->send($request);
+        $response = $this->client->send($request);
         $responseContents = (array) json_decode($response->getBody()->getContents());
         $redsysResponse = new RedsysResponse($this->redsysClient);
 
